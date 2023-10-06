@@ -8,17 +8,12 @@ class DataRecovery:
         self.replacement_file = replacement_file
         self.output_file = output_file
 
-    def __load_data(self, file_path):
+    def _load_data(self, file_path):
         # по api github скачиваем файлы
         data = pd.read_json(file_path)
         # Преаращаем dataframe в list
         data = data.values.tolist()
         return data
-
-    def __save_data(self,new_data):
-        # сохраняем итоговый список строк
-        with open(self.output_file, "w") as result:
-            json.dump(new_data, result)
 
     def __search_for_replacements(self,replace):
         # cсоздаем словарь, значиение повторяющихся ключей автоматически перезаписывается
@@ -54,13 +49,18 @@ class DataRecovery:
 
     def recover(self):
         #загружаем файлы по указанным путям github
-        data = self.__load_data(self.data_file)
-        replacements = self.__load_data(self.replacement_file)
+        data = self._load_data(self.data_file)
+        replacements = self._load_data(self.replacement_file)
         #восстанавливаем данные
         new_data = self.__replace_data(data, replacements)
         #сохраняем востановленные данные
-        self.__save_data(new_data)
+        return new_data
 
+
+def save_data(output_file,new_data):
+    # сохраняем итоговый список строк
+    with open(output_file, "w") as result:
+        json.dump(new_data, result)
 
 def program_start():
     data_file = 'https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/data.json'
@@ -71,7 +71,9 @@ def program_start():
 
     processor = DataRecovery(data_file, replacement_file, output_file)
 
-    processor.recover()
+    new_data = processor.recover()
+
+    save_data(output_file,new_data)
 
 
 # Press the green button in the gutter to run the script.
