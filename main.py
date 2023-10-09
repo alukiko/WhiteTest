@@ -14,7 +14,7 @@ class DataRecovery:
         data = data.values.tolist()
         return data
 
-    def __search_for_replacements(self,replace):
+    def _search_for_replacements(self,replace):
         # cсоздаем словарь, значиение повторяющихся ключей автоматически перезаписывается
         # и храниться последнее записанное значение
         dict_replace = {}
@@ -22,17 +22,17 @@ class DataRecovery:
             dict_replace[i[0]] = i[1]
         return dict_replace
 
-    def __keys_replacements(self, dict_replace):
+    def _keys_replacements(self, dict_replace):
         # создадим список ключей
         keys = list(dict_replace.keys())
         # отсортируем ключи по длине от самого длинного к саммому короткому
         # в таком случае сначала будут заменяться более длинные ключи в строке
-        keys.sort(reverse=True)
+        keys.sort(reverse=True,key=len)
         return keys
 
     def __replace_data(self, data, replacements):
-        dict_replace = self.__search_for_replacements(replacements)
-        keys = self.__keys_replacements(dict_replace)
+        dict_replace = self._search_for_replacements(replacements)
+        keys = self._keys_replacements(dict_replace)
         new_data = []
         # заменяем подстроки в сообщениях на изночальные и добавляем полученное сообщение в список
         for i in range(len(data)):
