@@ -3,10 +3,9 @@ import pandas as pd
 import json
 
 class DataRecovery:
-    def __init__(self, data_file,replacement_file,output_file):
+    def __init__(self, data_file,replacement_file):
         self.data_file = data_file
         self.replacement_file = replacement_file
-        self.output_file = output_file
 
     def _load_data(self, file_path):
         # по api github скачиваем файлы
@@ -44,7 +43,7 @@ class DataRecovery:
                 else:
                     data_now = data_now.replace(j, dict_replace[j])
             if data_now != '':
-                new_data.append(data_now)
+                new_data.append([data_now])
         return new_data
 
     def recover(self):
@@ -69,7 +68,7 @@ def program_start():
 
     output_file = "result.json"
 
-    processor = DataRecovery(data_file, replacement_file, output_file)
+    processor = DataRecovery(data_file, replacement_file)
 
     new_data = processor.recover()
 
